@@ -10,10 +10,29 @@ WHITE, BLACK = range(2)
 
 Coordinate = collections.namedtuple('Coordinate', ('x', 'y'))
 
-
 def search_maze(maze, s, e):
     # TODO - you fill in here.
-    return []
+
+    # Find path
+    visited = set()
+    path = []
+    def search(currCell):
+        if ((0 <= currCell.x < len(maze) and (0 <= currCell.y < len(maze[0])))) \
+            and (currCell not in visited) \
+            and (maze[currCell.x][currCell.y] == WHITE):
+            visited.add(currCell)
+            path.append(currCell)
+            if (currCell == e):
+                return True
+            offsets = [(1,0), (-1,0), (0,1), (0,-1)]
+            if (any([search(Coordinate(currCell.x + o[0], currCell.y + o[1])) for o in offsets])):
+                return True
+            path.pop()
+        return False
+
+
+    search(s)
+    return path
 
 
 def path_element_is_feasible(maze, prev, cur):
